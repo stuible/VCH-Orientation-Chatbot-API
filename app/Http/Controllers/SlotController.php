@@ -17,5 +17,6 @@ class SlotController extends Controller
             ->get();
 
         return $response;
+        
     }
 }
