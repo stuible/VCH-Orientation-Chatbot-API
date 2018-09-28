@@ -17,8 +17,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//List all Intents
-Route::get('intents', 'IntentController@index');
+//Return Slot response
+Route::get('{intent}/{slot}', 'SlotController@show');
 
 //Get Article by ID
-Route::get('intents', 'IntentController@show');
+// Route::get('intents', 'IntentController@show');
