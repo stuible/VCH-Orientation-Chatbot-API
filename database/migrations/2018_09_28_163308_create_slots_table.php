@@ -16,7 +16,7 @@ class CreateSlotsTable extends Migration
         Schema::create('slots', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('intentID')->unsigned();
-            $table->foreign('intentID')->references('id')->on('intents');
+            $table->foreign('intentID')->references('id')->on('intents')->onDelete('cascade');
             $table->string('title');
             $table->string('response');
             $table->timestamps();
