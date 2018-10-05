@@ -1,29 +1,34 @@
 <template>
-    <div id="intents">
-        <h1>Intents</h1>
-        <div class="card" v-for="intent in intents" v-bind:key="intent.id">
-            <header class="card-header">
-                <p class="card-header-title">
-                {{ intent.name }}
-                </p>
-                <!-- <a href="#" class="card-header-icon" aria-label="more options">
-                <span class="icon">
-                    <i class="fas fa-angle-down" aria-hidden="true"></i>
-                </span>
-                </a> -->
-            </header>
-            <div class="card-content">
-                <div class="content">
-                {{ intent.description }}
-                <br>
-                <time datetime="2016-1-1">{{ intent.created_at }}</time>
+    <div id="intents" class="">
+        <h1 class="title is-1" >Intents</h1>
+        <div class="columns is-multiline">
+            <div class="column is-half" v-for="intent in intents" v-bind:key="intent.id">
+                <div class="intent box">
+                    <article class="media">
+                        <div class="content">
+                            <p class="card-header-title">
+                            {{ intent.name }}
+                            </p>
+                        
+                            <div class="content">
+                                {{ intent.description }}
+                                <!-- <br> -->
+                                <time datetime="2016-1-1">{{ intent.created_at }}</time>
+                            </div>
+                        
+                            <div class="level">
+                                <button @click="deleteIntent(intent.name)" class="button is-danger">Delete</button>
+                            </div>
+                        </div>
+                        
+                        <!-- <footer class="card-footer">
+                            <a @click="saveIntent(intent.name)" class="card-footer-item">Save</a>
+                            <a @click="ediIntent(intent.name)" class="card-footer-item">Edit</a>
+                            <a @click="deleteIntent(intent.name)" class="card-footer-item">Delete</a>
+                        </footer> -->
+                    </article>
                 </div>
             </div>
-            <!-- <footer class="card-footer">
-                <a href="#" class="card-footer-item">Save</a>
-                <a href="#" class="card-footer-item">Edit</a>
-                <a href="#" class="card-footer-item">Delete</a>
-            </footer> -->
         </div>
     </div>
 </template>
@@ -51,6 +56,18 @@
                     .then(res => {
                         this.intents = res.data;
                     })
+            },
+            deleteIntent(name){
+                if(confirm('Are you sure you want to delete?')){
+                    fetch(`api/intents/${name}`, {
+                        method: 'delete'
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        alert('Article Removed');
+                    })
+                    .catch(err => console.log(err));
+                }
             }
         }
     }
