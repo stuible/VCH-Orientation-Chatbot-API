@@ -11515,6 +11515,10 @@ label.panel-block:hover {
   padding: 3rem 1.5rem 6rem;
 }
 
+#intents {
+  margin-top: 50px;
+}
+
 .navbar {
   background-color: #fff;
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
