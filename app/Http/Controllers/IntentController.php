@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
+use App\Intent;
+use App\Http\Resources\Intent as IntentResource;
 
 class IntentController extends Controller
 {
@@ -13,7 +16,10 @@ class IntentController extends Controller
      */
     public function index()
     {
-        //
+        // Get all Intents
+        $intents = Intent::paginate(50);
+
+        return IntentResource::collection($intents);
     }
 
     /**
@@ -32,9 +38,17 @@ class IntentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $intentName)
     {
-        //
+        $intent = $intentName->isMethod('put') ? Intent::where('name', $intentName)->first() : new Intent;
+
+        $intent->id = $intentName->input('id');
+        $intent->name = $intentName->input('name');
+        $intent->description = $intentName->input('description');
+
+        if($intent->save()){
+            return new IntentResource($intent);
+        }
     }
 
     /**
@@ -43,10 +57,33 @@ class IntentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($intentName)
     {
-        //
+        // $response = DB::table('intents')
+        //     // ->join('slots', 'intents.id', '=', 'slots.intentID')
+        //     // ->where('intents.name', '=', $intent)
+        //     // ->where('slots.title', '=', $slot)
+        //     // ->select('intentID', 'name as intent', 'intents.created_at', 'intents.updated_at', 'slots.id as slotID', 'title as slot', 'response')
+        //     ->get();
+
+        // return $response;
+
+        $intent = Intent::where('name', $intentName)->first();
+
+        return new IntentResource($intent);
     }
+
+    // public function select($intent)
+    // {
+    //     $response = DB::table('intents')
+    //         ->join('slots', 'intents.id', '=', 'slots.intentID')
+    //         ->where('intents.name', '=', $intent)
+    //         // ->where('slots.title', '=', $slot)
+    //         ->select('intentID', 'name as intent', 'intents.created_at', 'intents.updated_at', 'slots.id as slotID', 'title as slot', 'response')
+    //         ->get();
+
+    //     return $response;
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -77,8 +114,13 @@ class IntentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($intentName)
     {
-        //
+        $intent = Intent::where('name', $intentName)->first();
+
+        if($intent->delete()){
+            return new IntentResource($intent);
+        }
+        
     }
 }
