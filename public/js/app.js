@@ -1101,6 +1101,7 @@ window.Vue = __webpack_require__(36);
  */
 
 Vue.component('intents', __webpack_require__(39));
+Vue.component('breadcrumbs', __webpack_require__(49));
 Vue.component('navbar', __webpack_require__(42));
 
 var app = new Vue({
@@ -43423,6 +43424,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -43449,6 +43455,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (res) {
                 _this.intents = res.data;
             });
+        },
+        deleteIntent: function deleteIntent(name) {
+            if (confirm('Are you sure you want to delete?')) {
+                fetch('api/intents/' + name, {
+                    method: 'delete'
+                }).then(function (res) {
+                    return res.json();
+                }).then(function (data) {
+                    alert('Article Removed');
+                }).catch(function (err) {
+                    return console.log(err);
+                });
+            }
         }
     }
 });
@@ -43461,37 +43480,58 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { attrs: { id: "intents" } },
-    [
-      _c("h1", [_vm._v("Intents")]),
-      _vm._v(" "),
+  return _c("div", { attrs: { id: "intents" } }, [
+    _c("h1", { staticClass: "title is-1" }, [_vm._v("Intents")]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "columns is-multiline" },
       _vm._l(_vm.intents, function(intent) {
-        return _c("div", { key: intent.id, staticClass: "card" }, [
-          _c("header", { staticClass: "card-header" }, [
-            _c("p", { staticClass: "card-header-title" }, [
-              _vm._v("\n            " + _vm._s(intent.name) + "\n            ")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-content" }, [
-            _c("div", { staticClass: "content" }, [
-              _vm._v(
-                "\n            " + _vm._s(intent.description) + "\n            "
-              ),
-              _c("br"),
-              _vm._v(" "),
-              _c("time", { attrs: { datetime: "2016-1-1" } }, [
-                _vm._v(_vm._s(intent.created_at))
+        return _c("div", { key: intent.id, staticClass: "column is-half" }, [
+          _c("div", { staticClass: "intent box" }, [
+            _c("article", { staticClass: "media" }, [
+              _c("div", { staticClass: "content" }, [
+                _c("p", { staticClass: "card-header-title" }, [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(intent.name) +
+                      "\n                        "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "content" }, [
+                  _vm._v(
+                    "\n                            " +
+                      _vm._s(intent.description) +
+                      "\n                            "
+                  ),
+                  _vm._v(" "),
+                  _c("time", { attrs: { datetime: "2016-1-1" } }, [
+                    _vm._v(_vm._s(intent.created_at))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "level" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "button is-danger",
+                      on: {
+                        click: function($event) {
+                          _vm.deleteIntent(intent.name)
+                        }
+                      }
+                    },
+                    [_vm._v("Delete")]
+                  )
+                ])
               ])
             ])
           ])
         ])
       })
-    ],
-    2
-  )
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -43618,6 +43658,102 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(9)
+/* script */
+var __vue_script__ = null
+/* template */
+var __vue_template__ = __webpack_require__(50)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/Breadcrumbs.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3f3ce3b5", Component.options)
+  } else {
+    hotAPI.reload("data-v-3f3ce3b5", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "container" }, [
+      _c(
+        "nav",
+        { staticClass: "breadcrumb", attrs: { "aria-label": "breadcrumbs" } },
+        [
+          _c("ul", [
+            _c("li", [_c("a", { attrs: { href: "#" } }, [_vm._v("Intents")])]),
+            _vm._v(" "),
+            _c("li", [_c("a", { attrs: { href: "#" } }, [_vm._v("Policies")])]),
+            _vm._v(" "),
+            _c("li", { staticClass: "is-active" }, [
+              _c("a", { attrs: { href: "#", "aria-current": "page" } }, [
+                _vm._v("Slot Name")
+              ])
+            ])
+          ])
+        ]
+      )
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3f3ce3b5", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
