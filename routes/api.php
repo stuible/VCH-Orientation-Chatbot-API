@@ -35,28 +35,22 @@ Route::put('intents/{name}', 'IntentController@store');
 //Destroy Intent
 Route::delete('intents/{name}', 'IntentController@destroy');
 
-//All slots by intent
-// Route::get('{intent}', 'IntentController@select');
+
 
 
 // SLOTS
 
-//Single slot routes
-Route::get('intents/{intent}/slots/{slot}', 'SlotController@show');
+//All Intents
+Route::get('intents/{intent}/slots', 'SlotController@index');
 
-// Route::post('/', function(Request $request) {
-//     return Intent::create($request->all);
-// });
+//Single Intent
+Route::get('intents/{intent}/slots/{name}', 'SlotController@show');
 
-// Route::put('/{id}', function(Request $request, $id) {
-//     $article = Article::findOrFail($id);
-//     $article->update($request->all());
+//Create Intent
+Route::post('intents/{intent}/slots', 'SlotController@store');
 
-//     return $article;
-// });
+//Create Intent
+Route::put('intents/{intent}/slots/{name}', 'SlotController@store');
 
-// Route::delete('/{id}', function($id) {
-//     Intent::find($id)->delete();
-
-//     return 204;
-// });
+//Destroy Intent
+Route::delete('intents/{intent}/slots/{name}', 'SlotController@destroy');
