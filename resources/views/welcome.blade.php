@@ -17,6 +17,7 @@
     <body>
         <div id="app">
             <navbar></navbar>
+            <breadcrumbs></breadcrumbs>
             <div class="container">
                 <intents></intents>
             </div>
