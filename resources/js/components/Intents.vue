@@ -3,7 +3,7 @@
         <h1 class="title is-1" >Intents</h1>
         <div class="columns is-multiline">
             <div class="column is-half" v-for="intent in intents" v-bind:key="intent.id">
-                <div class="intent box">
+                <router-link :to="intent.name" tag="div" class="intent box">
                     <article class="media">
                         <div class="content">
                             <p class="card-header-title">
@@ -27,7 +27,7 @@
                             <a @click="deleteIntent(intent.name)" class="card-footer-item">Delete</a>
                         </footer> -->
                     </article>
-                </div>
+                </router-link>
             </div>
         </div>
     </div>
