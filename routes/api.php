@@ -44,7 +44,7 @@ Route::delete('intents/{name}', 'IntentController@destroy');
 Route::get('intents/{intent}/slots', 'SlotController@index');
 
 //Single Intent
-Route::get('intents/{intent}/slots/{name}', 'SlotController@show');
+Route::get('intents/{intent}/slots/{slot}', 'SlotController@show');
 
 //Create Intent
 Route::post('intents/{intent}/slots', 'SlotController@store');
