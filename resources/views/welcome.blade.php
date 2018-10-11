@@ -17,9 +17,9 @@
     <body>
         <div id="app">
             <navbar></navbar>
-            <breadcrumbs></breadcrumbs>
+            {{-- <breadcrumbs></breadcrumbs> --}}
             <div class="container">
-                <intents></intents>
+                <router-view></router-view>
             </div>
         </div>
 
