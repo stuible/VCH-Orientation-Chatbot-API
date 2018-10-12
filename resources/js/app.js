@@ -5,15 +5,18 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+// require('./bootstrap');
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import router from './routes';
+import Vuetify from 'vuetify'
 
 window.Vue = require('vue');
 
 Vue.use(VueRouter);
+Vue.use(Vuetify)
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -23,9 +26,12 @@ Vue.use(VueRouter);
 
 Vue.component('intents', require('./components/Intents.vue'));
 Vue.component('breadcrumbs', require('./components/Breadcrumbs.vue'));
-Vue.component('navbar', require('./components/Navbar.vue'));
+Vue.component('navigation', require('./components/Navigation.vue'));
 
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    data: () => ({
+        drawer: null,
+    })
 });

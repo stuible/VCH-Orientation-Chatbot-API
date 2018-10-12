@@ -20,8 +20,9 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
-        "bulma": "^0.7.1",
+        "npm": "^6.4.1",
         "vue-router": "^3.0.1",
+        "vuetify": "^1.2.9",
         "vuex": "^3.0.1"
     }
 }
