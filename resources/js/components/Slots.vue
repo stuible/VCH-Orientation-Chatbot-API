@@ -15,11 +15,11 @@
                     <v-container grid-list-md>
                         <v-layout wrap>
                             <v-flex xs12 sm12 md12>
-                                <v-text-field v-model="editedItem.title" label="Term"></v-text-field>
+                                <v-text-field v-model="slot.title" label="Term"></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm12 md12>
                                 <!-- <v-text-field v-model="editedItem.response" label="Response"></v-text-field> -->
-                                <wysiwyg v-model="editedItem.response" />
+                                <wysiwyg v-model="slot.response" />
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -37,12 +37,15 @@
     <v-data-table :headers="headers" :items="slots">
         <template slot="items" slot-scope="props">
             <td>
-                <v-edit-dialog :return-value.sync="props.item.title" lazy @save="save" @cancel="cancel" @open="open" @close="close"> {{ props.item.title }}
+                <v-edit-dialog :return-value.sync="props.item.title" lazy @save="save" @cancel="cancel" @open="open" @close="close"> 
+                  
+                  {{ props.item.title }}
                     <v-text-field slot="input" v-model="props.item.title" label="Edit" single-line></v-text-field>
                 </v-edit-dialog>
             </td>
             <td>
-                <v-edit-dialog :return-value.sync="props.item.response" lazy @save="save" @cancel="cancel" @open="open" @close="close"> {{ props.item.response }}
+                <v-edit-dialog :return-value.sync="props.item.response" lazy @save="save" @cancel="cancel" @open="open" @close="close"> 
+                  <span v-html="props.item.response"></span>
                     <v-text-field slot="input" v-model="props.item.response" label="Edit" single-line></v-text-field>
                 </v-edit-dialog>
             </td>
@@ -99,15 +102,15 @@ export default {
         }
     },
     created() {
-        this.fetchIntents();
+        this.fetchSlots();
     },
     beforeRouteUpdate(to) {
         this.intent = to.params.intentName;
-        this.fetchIntents();
+        this.fetchSlots();
     },
 
     methods: {
-        fetchIntents() {
+        fetchSlots() {
             fetch('api/intents/' + this.intent + '/slots')
                 .then(res => res.json())
                 .then(res => {
@@ -126,6 +129,9 @@ export default {
                     .catch(err => console.log(err));
             }
         },
+        save() {
+
+        },
         createSlot() {
             // if (this.editedIndex > -1) {
             //     Object.assign(this.desserts[this.editedIndex], this.editedItem)
@@ -133,6 +139,20 @@ export default {
             //     this.desserts.push(this.editedItem)
             // }
             // this.close()
+            fetch('api/intents/' + this.intent + '/slots', {
+              method: 'post',
+              body: JSON.stringify(this.slot),
+              headers: {
+                'content-type': 'application/json'
+              }
+            }).then(res => res.json())
+            .then(data => {
+              this.slot.title = '';
+              this.slot.response = '';
+              alert('Slot Added');
+              this.fetchSlots();
+            })
+            .catch(err => console.log(err))
         },
         cancel() {
 
