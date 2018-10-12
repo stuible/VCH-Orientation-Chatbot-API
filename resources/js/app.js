@@ -10,12 +10,23 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import router from './routes';
-import Vuetify from 'vuetify'
+import Vuetify from 'vuetify';
+import wysiwyg from "vue-wysiwyg";
 
 window.Vue = require('vue');
 
 Vue.use(VueRouter);
 Vue.use(Vuetify)
+Vue.use(wysiwyg, {
+    hideModules: { 
+        "justifyLeft": true,
+        "justifyCenter": true,
+        "justifyRight": true,
+        "separator": true,
+        "headings": true,
+        "image": true,
+    },
+});
 
 
 /**

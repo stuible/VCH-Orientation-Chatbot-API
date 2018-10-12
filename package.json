@@ -21,7 +21,9 @@
     },
     "dependencies": {
         "npm": "^6.4.1",
+        "vue-html-editor": "^0.2.1",
         "vue-router": "^3.0.1",
+        "vue-wysiwyg": "^1.7.2",
         "vuetify": "^1.2.9",
         "vuex": "^3.0.1"
     }
