@@ -59,31 +59,11 @@ class IntentController extends Controller
      */
     public function show($intentName)
     {
-        // $response = DB::table('intents')
-        //     // ->join('slots', 'intents.id', '=', 'slots.intentID')
-        //     // ->where('intents.name', '=', $intent)
-        //     // ->where('slots.title', '=', $slot)
-        //     // ->select('intentID', 'name as intent', 'intents.created_at', 'intents.updated_at', 'slots.id as slotID', 'title as slot', 'response')
-        //     ->get();
-
-        // return $response;
 
         $intent = Intent::where('name', $intentName)->first();
 
         return new IntentResource($intent);
     }
-
-    // public function select($intent)
-    // {
-    //     $response = DB::table('intents')
-    //         ->join('slots', 'intents.id', '=', 'slots.intentID')
-    //         ->where('intents.name', '=', $intent)
-    //         // ->where('slots.title', '=', $slot)
-    //         ->select('intentID', 'name as intent', 'intents.created_at', 'intents.updated_at', 'slots.id as slotID', 'title as slot', 'response')
-    //         ->get();
-
-    //     return $response;
-    // }
 
     /**
      * Show the form for editing the specified resource.
