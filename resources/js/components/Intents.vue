@@ -1,15 +1,4 @@
 <template>
- <!--   <v-list dense class="pt-0">
-
-                <router-link :to="intent.name" tag="v-list-tile" v-for="intent in intents" :key="intent.id" class="intent box">
-                <v-list-tile-action>
-                        <v-icon>[]</v-icon>
-                        </v-list-tile-action>
-
-                        <v-list-tile-content>
-                        <v-list-tile-title>{{ intent.name }}</v-list-tile-title>
-                </v-list-tile-content>
-                </router-link> -->
         <v-list two-line subheader>
             <router-link :to="intent.name" tag="v-list-tile" v-for="intent in intents" :key="intent.id">
             <v-list-tile-avatar>
