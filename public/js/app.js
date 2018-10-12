@@ -14647,6 +14647,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['intentName'],
@@ -14657,6 +14658,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return v.length <= 25 || 'Input too long!';
             },
             dialog: false,
+            loading: false,
             slots: [],
             slot: {
                 id: '',
@@ -14707,10 +14709,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         fetchSlots: function fetchSlots() {
             var _this = this;
 
+            this.loading = true;
             fetch('api/intents/' + this.intent + '/slots').then(function (res) {
                 return res.json();
             }).then(function (res) {
                 _this.slots = res.data;
+                _this.loading = false;
             });
         },
         deleteIntent: function deleteIntent(name) {
@@ -14917,125 +14921,139 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("v-data-table", {
-        attrs: { headers: _vm.headers, items: _vm.slots },
-        scopedSlots: _vm._u([
-          {
-            key: "items",
-            fn: function(props) {
-              return [
-                _c(
-                  "td",
-                  [
-                    _c(
-                      "v-edit-dialog",
-                      {
-                        attrs: { "return-value": props.item.title, lazy: "" },
-                        on: {
-                          "update:returnValue": function($event) {
-                            _vm.$set(props.item, "title", $event)
-                          },
-                          save: _vm.save,
-                          cancel: _vm.cancel,
-                          open: _vm.open,
-                          close: _vm.close
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n\n                    " +
-                            _vm._s(props.item.title) +
-                            "\n                    "
-                        ),
-                        _c("v-text-field", {
-                          attrs: {
-                            slot: "input",
-                            label: "Edit",
-                            "single-line": ""
-                          },
-                          slot: "input",
-                          model: {
-                            value: props.item.title,
-                            callback: function($$v) {
-                              _vm.$set(props.item, "title", $$v)
-                            },
-                            expression: "props.item.title"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "td",
-                  [
-                    _c(
-                      "v-edit-dialog",
-                      {
-                        attrs: {
-                          "return-value": props.item.response,
-                          lazy: ""
-                        },
-                        on: {
-                          "update:returnValue": function($event) {
-                            _vm.$set(props.item, "response", $event)
-                          },
-                          save: _vm.save,
-                          cancel: _vm.cancel,
-                          open: _vm.open,
-                          close: _vm.close
-                        }
-                      },
-                      [
-                        _c("span", {
-                          domProps: { innerHTML: _vm._s(props.item.response) }
-                        }),
-                        _vm._v(" "),
-                        _c("v-text-field", {
-                          attrs: {
-                            slot: "input",
-                            label: "Edit",
-                            "single-line": ""
-                          },
-                          slot: "input",
-                          model: {
-                            value: props.item.response,
-                            callback: function($$v) {
-                              _vm.$set(props.item, "response", $$v)
-                            },
-                            expression: "props.item.response"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  ],
-                  1
-                )
-              ]
-            }
+      _c(
+        "v-data-table",
+        {
+          attrs: {
+            headers: _vm.headers,
+            items: _vm.slots,
+            loading: _vm.loading
           },
-          {
-            key: "pageText",
-            fn: function(ref) {
-              var pageStart = ref.pageStart
-              var pageStop = ref.pageStop
-              return [
-                _vm._v(
-                  "\n            From " +
-                    _vm._s(pageStart) +
-                    " to " +
-                    _vm._s(pageStop) +
-                    "\n        "
-                )
-              ]
+          scopedSlots: _vm._u([
+            {
+              key: "items",
+              fn: function(props) {
+                return [
+                  _c(
+                    "td",
+                    [
+                      _c(
+                        "v-edit-dialog",
+                        {
+                          attrs: { "return-value": props.item.title, lazy: "" },
+                          on: {
+                            "update:returnValue": function($event) {
+                              _vm.$set(props.item, "title", $event)
+                            },
+                            save: _vm.save,
+                            cancel: _vm.cancel,
+                            open: _vm.open,
+                            close: _vm.close
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n\n                    " +
+                              _vm._s(props.item.title) +
+                              "\n                    "
+                          ),
+                          _c("v-text-field", {
+                            attrs: {
+                              slot: "input",
+                              label: "Edit",
+                              "single-line": ""
+                            },
+                            slot: "input",
+                            model: {
+                              value: props.item.title,
+                              callback: function($$v) {
+                                _vm.$set(props.item, "title", $$v)
+                              },
+                              expression: "props.item.title"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    [
+                      _c(
+                        "v-edit-dialog",
+                        {
+                          attrs: {
+                            "return-value": props.item.response,
+                            lazy: ""
+                          },
+                          on: {
+                            "update:returnValue": function($event) {
+                              _vm.$set(props.item, "response", $event)
+                            },
+                            save: _vm.save,
+                            cancel: _vm.cancel,
+                            open: _vm.open,
+                            close: _vm.close
+                          }
+                        },
+                        [
+                          _c("span", {
+                            domProps: { innerHTML: _vm._s(props.item.response) }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              slot: "input",
+                              label: "Edit",
+                              "single-line": ""
+                            },
+                            slot: "input",
+                            model: {
+                              value: props.item.response,
+                              callback: function($$v) {
+                                _vm.$set(props.item, "response", $$v)
+                              },
+                              expression: "props.item.response"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ]
+              }
+            },
+            {
+              key: "pageText",
+              fn: function(ref) {
+                var pageStart = ref.pageStart
+                var pageStop = ref.pageStop
+                return [
+                  _vm._v(
+                    "\n            From " +
+                      _vm._s(pageStart) +
+                      " to " +
+                      _vm._s(pageStop) +
+                      "\n        "
+                  )
+                ]
+              }
             }
-          }
-        ])
-      })
+          ])
+        },
+        [
+          _c("v-progress-linear", {
+            attrs: { slot: "progress", color: "blue", indeterminate: "" },
+            slot: "progress"
+          })
+        ],
+        1
+      )
     ],
     1
   )

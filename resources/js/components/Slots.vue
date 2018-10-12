@@ -34,7 +34,8 @@
         </v-dialog>
     </v-toolbar>
 
-    <v-data-table :headers="headers" :items="slots">
+    <v-data-table :headers="headers" :items="slots" :loading="loading">
+    <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
         <template slot="items" slot-scope="props">
             <td>
                 <v-edit-dialog :return-value.sync="props.item.title" lazy @save="save" @cancel="cancel" @open="open" @close="close">
@@ -65,6 +66,7 @@ export default {
             intent: this.intentName,
             max25chars: (v) => v.length <= 25 || 'Input too long!',
             dialog: false,
+            loading: false,
             slots: [],
             slot: {
                 id: '',
@@ -113,10 +115,12 @@ export default {
 
     methods: {
         fetchSlots() {
+            this.loading = true;
             fetch('api/intents/' + this.intent + '/slots')
                 .then(res => res.json())
                 .then(res => {
                     this.slots = res.data;
+                    this.loading = false;
                 })
         },
         deleteIntent(name) {
