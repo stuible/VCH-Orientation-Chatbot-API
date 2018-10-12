@@ -14424,17 +14424,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -14655,6 +14644,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['intentName'],
@@ -14700,16 +14692,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     created: function created() {
-        this.fetchIntents();
+        this.fetchSlots();
     },
     beforeRouteUpdate: function beforeRouteUpdate(to) {
         this.intent = to.params.intentName;
-        this.fetchIntents();
+        this.fetchSlots();
     },
 
 
     methods: {
-        fetchIntents: function fetchIntents() {
+        fetchSlots: function fetchSlots() {
             var _this = this;
 
             fetch('api/intents/' + this.intent + '/slots').then(function (res) {
@@ -14731,23 +14723,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
             }
         },
+        save: function save() {},
         createSlot: function createSlot() {
+            var _this2 = this;
+
             // if (this.editedIndex > -1) {
             //     Object.assign(this.desserts[this.editedIndex], this.editedItem)
             // } else {
             //     this.desserts.push(this.editedItem)
             // }
             // this.close()
+            fetch('api/intents/' + this.intent + '/slots', {
+                method: 'post',
+                body: JSON.stringify(this.slot),
+                headers: {
+                    'content-type': 'application/json'
+                }
+            }).then(function (res) {
+                return res.json();
+            }).then(function (data) {
+                _this2.slot.title = '';
+                _this2.slot.response = '';
+                alert('Slot Added');
+                _this2.fetchSlots();
+            }).catch(function (err) {
+                return console.log(err);
+            });
         },
         cancel: function cancel() {},
         open: function open() {},
         close: function close() {
-            var _this2 = this;
+            var _this3 = this;
 
             this.dialog = false;
             setTimeout(function () {
-                _this2.editedItem = Object.assign({}, _this2.defaultItem);
-                _this2.editedIndex = -1;
+                _this3.editedItem = Object.assign({}, _this3.defaultItem);
+                _this3.editedIndex = -1;
             }, 300);
         }
     }
@@ -14823,11 +14834,11 @@ var render = function() {
                                   _c("v-text-field", {
                                     attrs: { label: "Term" },
                                     model: {
-                                      value: _vm.editedItem.title,
+                                      value: _vm.slot.title,
                                       callback: function($$v) {
-                                        _vm.$set(_vm.editedItem, "title", $$v)
+                                        _vm.$set(_vm.slot, "title", $$v)
                                       },
-                                      expression: "editedItem.title"
+                                      expression: "slot.title"
                                     }
                                   })
                                 ],
@@ -14840,15 +14851,11 @@ var render = function() {
                                 [
                                   _c("wysiwyg", {
                                     model: {
-                                      value: _vm.editedItem.response,
+                                      value: _vm.slot.response,
                                       callback: function($$v) {
-                                        _vm.$set(
-                                          _vm.editedItem,
-                                          "response",
-                                          $$v
-                                        )
+                                        _vm.$set(_vm.slot, "response", $$v)
                                       },
-                                      expression: "editedItem.response"
+                                      expression: "slot.response"
                                     }
                                   })
                                 ],
@@ -14933,7 +14940,7 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          " " +
+                          " \n                  \n                  " +
                             _vm._s(props.item.title) +
                             "\n                    "
                         ),
@@ -14980,11 +14987,10 @@ var render = function() {
                         }
                       },
                       [
-                        _vm._v(
-                          " " +
-                            _vm._s(props.item.response) +
-                            "\n                    "
-                        ),
+                        _c("span", {
+                          domProps: { innerHTML: _vm._s(props.item.response) }
+                        }),
+                        _vm._v(" "),
                         _c("v-text-field", {
                           attrs: {
                             slot: "input",

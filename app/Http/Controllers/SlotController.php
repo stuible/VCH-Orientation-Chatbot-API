@@ -26,4 +26,22 @@ class SlotController extends Controller
         return SlotResource::collection($slots);
     }
 
+    public function store(Request $request, $intent)
+    {
+        // $slot = $request->isMethod('put') ? Slot::where('name', $intentName)->first() : new Slot;
+
+        $intent = Intent::where('name', $intent)->first();
+
+        $slot = new Slot;
+
+        $slot->id = $request->input('id');
+        $slot->title = $request->input('title');
+        $slot->response = $request->input('response');
+        $slot->intentID = $intent['id'];
+
+        if($slot->save()){
+            return new SlotResource($slot);
+        }
+    }
+
 }
