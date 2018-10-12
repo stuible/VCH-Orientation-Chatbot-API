@@ -14481,7 +14481,7 @@ var render = function() {
     _vm._l(_vm.intents, function(intent) {
       return _c(
         "router-link",
-        { key: intent.id, attrs: { to: intent.name, tag: "v-list-tile" } },
+        { key: intent.id, attrs: { tag: "v-list-tile", to: intent.name } },
         [
           _c(
             "v-list-tile-avatar",
@@ -14691,11 +14691,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         };
     },
-    created: function created() {
-        this.fetchSlots();
+
+    watch: {
+        '$route.params.intentName': function $routeParamsIntentName(id) {
+            this.intent = id;
+            this.fetchSlots();
+        }
     },
-    beforeRouteUpdate: function beforeRouteUpdate(to) {
-        this.intent = to.params.intentName;
+    created: function created() {
         this.fetchSlots();
     },
 
@@ -14940,7 +14943,7 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          " \n                  \n                  " +
+                          "\n\n                    " +
                             _vm._s(props.item.title) +
                             "\n                    "
                         ),
