@@ -1,36 +1,33 @@
 <template>
-    <div id="intents" class="">
-        <h1 class="title is-1" >Intents</h1>
-        <div class="columns is-multiline">
-            <div class="column is-half" v-for="intent in intents" v-bind:key="intent.id">
-                <router-link :to="intent.name" tag="div" class="intent box">
-                    <article class="media">
-                        <div class="content">
-                            <p class="card-header-title">
-                            {{ intent.name }}
-                            </p>
-                        
-                            <div class="content">
-                                {{ intent.description }}
-                                <!-- <br> -->
-                                <time datetime="2016-1-1">{{ intent.created_at }}</time>
-                            </div>
-                        
-                            <div class="level">
-                                <button @click="deleteIntent(intent.name)" class="button is-danger">Delete</button>
-                            </div>
-                        </div>
-                        
-                        <!-- <footer class="card-footer">
-                            <a @click="saveIntent(intent.name)" class="card-footer-item">Save</a>
-                            <a @click="ediIntent(intent.name)" class="card-footer-item">Edit</a>
-                            <a @click="deleteIntent(intent.name)" class="card-footer-item">Delete</a>
-                        </footer> -->
-                    </article>
-                </router-link>
-            </div>
-        </div>
-    </div>
+ <!--   <v-list dense class="pt-0">
+
+                <router-link :to="intent.name" tag="v-list-tile" v-for="intent in intents" :key="intent.id" class="intent box">
+                <v-list-tile-action>
+                        <v-icon>[]</v-icon>
+                        </v-list-tile-action>
+
+                        <v-list-tile-content>
+                        <v-list-tile-title>{{ intent.name }}</v-list-tile-title>
+                </v-list-tile-content>
+                </router-link> -->
+        <v-list two-line subheader>
+            <router-link :to="intent.name" tag="v-list-tile" v-for="intent in intents" :key="intent.id">
+            <v-list-tile-avatar>
+              <v-icon class="blue white--text">assignment</v-icon>
+            </v-list-tile-avatar>
+
+            <v-list-tile-content>
+              <v-list-tile-title>{{ intent.name }}</v-list-tile-title>
+              <v-list-tile-sub-title>{{ intent.description }}</v-list-tile-sub-title>
+            </v-list-tile-content>
+
+            <v-list-tile-action>
+              <v-btn icon ripple>
+                <v-icon color="grey lighten-1">info</v-icon>
+              </v-btn>
+            </v-list-tile-action>
+          </router-link>
+    </v-list>
 </template>
 
 <script>
@@ -40,7 +37,7 @@
                 intents: [],
                 intent: {
                     id: '',
-                    title: '',
+                    name: '',
                     description: ''
                 }
             }
