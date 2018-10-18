@@ -30,7 +30,7 @@ Route::get('intents/{name}', 'IntentController@show');
 Route::post('intents', 'IntentController@store');
 
 //Create Intent
-Route::put('intents/{name}', 'IntentController@store');
+Route::put('intents', 'IntentController@store');
 
 //Destroy Intent
 Route::delete('intents/{name}', 'IntentController@destroy');
@@ -49,8 +49,8 @@ Route::get('intents/{intent}/slots/{slot}', 'SlotController@show');
 //Create Intent
 Route::post('intents/{intent}/slots', 'SlotController@store');
 
-//Create Intent
-Route::put('intents/{intent}/slots/{name}', 'SlotController@store');
+//Update Intent
+Route::put('intents/{intent}/slots', 'SlotController@store');
 
 //Destroy Intent
 Route::delete('intents/{intent}/slots/{name}', 'SlotController@destroy');
