@@ -142,7 +142,7 @@ export default {
         },
         save() {
             if (this.editedIndex > -1) {
-                
+                this.updateSlot()
                 Object.assign(this.slots[this.editedIndex], this.slot)
             } else {
 
