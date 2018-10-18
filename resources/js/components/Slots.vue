@@ -24,10 +24,10 @@
                     <v-container grid-list-md>
                         <v-layout wrap>
                             <v-flex xs12 sm12 md12>
-                                <v-text-field v-model="editedItem.title" label="Term"></v-text-field>
+                                <v-text-field v-model="slot.title" label="Term"></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm12 md12>
-                                <wysiwyg v-model="editedItem.response" />
+                                <wysiwyg v-model="slot.response" />
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -97,10 +97,6 @@ export default {
                 },
             ],
             editedIndex: -1,
-            editedItem: {
-                title: '',
-                response: ''
-            },
             defaultItem: {
                 title: '',
                 response: ''
@@ -147,37 +143,50 @@ export default {
         save() {
             if (this.editedIndex > -1) {
                 
-                Object.assign(this.slots[this.editedIndex], this.editedItem)
+                Object.assign(this.slots[this.editedIndex], this.slot)
             } else {
 
                 this.createSlot();
-                this.slots.push(this.editedItem)
+                this.slots.push(this.slot)
                 }
             this.close()
         },
         editSlot(item) {
             this.editedIndex = this.slots.indexOf(item)
-            this.editedItem = Object.assign({}, item)
+            this.slot = Object.assign({}, item)
             this.dialog = true
         },
         createSlot() {
             fetch('api/intents/' + this.intent + '/slots', {
                     method: 'post',
-                    body: JSON.stringify(this.editedItem),
+                    body: JSON.stringify(this.slot),
                     headers: {
                         'content-type': 'application/json'
                     }
                 }).then(res => res.json())
                 .then(data => {
-                    // this.editedItem.title = '';
-                    // this.editedItem.response = '';
+                    // this.slot.title = '';
+                    // this.slot.response = '';
                     alert('Slot Added');
                     this.fetchSlots();
                 })
                 .catch(err => console.log(err))
         },
         updateSlot() {
-
+            fetch('api/intents/' + this.intent + '/slots', {
+                    method: 'put',
+                    body: JSON.stringify(this.slot),
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }).then(res => res.json())
+                .then(data => {
+                    // this.slot.title = '';
+                    // this.slot.response = '';
+                    alert('Slot Updated');
+                    this.fetchSlots();
+                })
+                .catch(err => console.log(err))
         },
         cancel() {
 
@@ -188,7 +197,7 @@ export default {
         close() {
             this.dialog = false
             setTimeout(() => {
-                this.editedItem = Object.assign({}, this.defaultItem)
+                this.slot = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
             }, 300)
         },
