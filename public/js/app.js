@@ -14652,6 +14652,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['intentName'],
@@ -14659,9 +14664,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             intent: this.intentName,
             search: '',
-            max25chars: function max25chars(v) {
-                return v.length <= 25 || 'Input too long!';
-            },
+            itemsPerPage: [50, 75],
             dialog: false,
             loading: false,
             slots: [],
@@ -14683,18 +14686,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }],
             editedIndex: -1,
             editedItem: {
-                name: '',
-                calories: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0
+                title: '',
+                response: ''
             },
             defaultItem: {
-                name: '',
-                calories: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0
+                title: '',
+                response: ''
             }
         };
     },
@@ -14703,6 +14700,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         '$route.params.intentName': function $routeParamsIntentName(id) {
             this.intent = id;
             this.fetchSlots();
+        }
+    },
+    computed: {
+        formTitle: function formTitle() {
+            return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
         }
     },
     created: function created() {
@@ -14735,33 +14737,43 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
             }
         },
-        save: function save() {},
+        save: function save() {
+            if (this.editedIndex > -1) {
+
+                Object.assign(this.slots[this.editedIndex], this.editedItem);
+            } else {
+
+                this.createSlot();
+                this.slots.push(this.editedItem);
+            }
+            this.close();
+        },
+        editSlot: function editSlot(item) {
+            this.editedIndex = this.slots.indexOf(item);
+            this.editedItem = Object.assign({}, item);
+            this.dialog = true;
+        },
         createSlot: function createSlot() {
             var _this2 = this;
 
-            // if (this.editedIndex > -1) {
-            //     Object.assign(this.desserts[this.editedIndex], this.editedItem)
-            // } else {
-            //     this.desserts.push(this.editedItem)
-            // }
-            // this.close()
             fetch('api/intents/' + this.intent + '/slots', {
                 method: 'post',
-                body: JSON.stringify(this.slot),
+                body: JSON.stringify(this.editedItem),
                 headers: {
                     'content-type': 'application/json'
                 }
             }).then(function (res) {
                 return res.json();
             }).then(function (data) {
-                _this2.slot.title = '';
-                _this2.slot.response = '';
+                // this.editedItem.title = '';
+                // this.editedItem.response = '';
                 alert('Slot Added');
                 _this2.fetchSlots();
             }).catch(function (err) {
                 return console.log(err);
             });
         },
+        updateSlot: function updateSlot() {},
         cancel: function cancel() {},
         open: function open() {},
         close: function close() {
@@ -14842,7 +14854,7 @@ var render = function() {
                 [
                   _c("v-card-title", [
                     _c("span", { staticClass: "headline" }, [
-                      _vm._v("Create New Response")
+                      _vm._v(_vm._s(_vm.formTitle))
                     ])
                   ]),
                   _vm._v(" "),
@@ -14864,11 +14876,11 @@ var render = function() {
                                   _c("v-text-field", {
                                     attrs: { label: "Term" },
                                     model: {
-                                      value: _vm.slot.title,
+                                      value: _vm.editedItem.title,
                                       callback: function($$v) {
-                                        _vm.$set(_vm.slot, "title", $$v)
+                                        _vm.$set(_vm.editedItem, "title", $$v)
                                       },
-                                      expression: "slot.title"
+                                      expression: "editedItem.title"
                                     }
                                   })
                                 ],
@@ -14881,11 +14893,15 @@ var render = function() {
                                 [
                                   _c("wysiwyg", {
                                     model: {
-                                      value: _vm.slot.response,
+                                      value: _vm.editedItem.response,
                                       callback: function($$v) {
-                                        _vm.$set(_vm.slot, "response", $$v)
+                                        _vm.$set(
+                                          _vm.editedItem,
+                                          "response",
+                                          $$v
+                                        )
                                       },
-                                      expression: "slot.response"
+                                      expression: "editedItem.response"
                                     }
                                   })
                                 ],
@@ -14925,7 +14941,7 @@ var render = function() {
                           attrs: { color: "blue darken-1", flat: "" },
                           nativeOn: {
                             click: function($event) {
-                              return _vm.createSlot($event)
+                              return _vm.save($event)
                             }
                           }
                         },
@@ -14951,26 +14967,39 @@ var render = function() {
             headers: _vm.headers,
             items: _vm.slots,
             loading: _vm.loading,
-            search: _vm.search
+            search: _vm.search,
+            "rows-per-page-items": _vm.itemsPerPage
           },
           scopedSlots: _vm._u([
             {
               key: "items",
               fn: function(props) {
                 return [
-                  _c("td", [
-                    _vm._v(
-                      "\n                " +
-                        _vm._s(props.item.title) +
-                        "\n            "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _c("span", {
-                      domProps: { innerHTML: _vm._s(props.item.response) }
-                    })
-                  ])
+                  _c(
+                    "tr",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.editSlot(props.item)
+                        }
+                      }
+                    },
+                    [
+                      _c("td", [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(props.item.title) +
+                            "\n                "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c("span", {
+                          domProps: { innerHTML: _vm._s(props.item.response) }
+                        })
+                      ])
+                    ]
+                  )
                 ]
               }
             },

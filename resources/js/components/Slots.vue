@@ -12,22 +12,22 @@
           hide-details
         ></v-text-field>
         <v-spacer></v-spacer>
+        <!-- Edit Popup Dialog -->
         <v-dialog v-model="dialog" max-width="500px">
             <v-btn slot="activator" color="primary" dark class="mb-2">Add Response</v-btn>
             <v-card>
                 <v-card-title>
-                    <span class="headline">Create New Response</span>
+                    <span class="headline">{{ formTitle }}</span>
                 </v-card-title>
 
                 <v-card-text>
                     <v-container grid-list-md>
                         <v-layout wrap>
                             <v-flex xs12 sm12 md12>
-                                <v-text-field v-model="slot.title" label="Term"></v-text-field>
+                                <v-text-field v-model="editedItem.title" label="Term"></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm12 md12>
-                                <!-- <v-text-field v-model="editedItem.response" label="Response"></v-text-field> -->
-                                <wysiwyg v-model="slot.response" />
+                                <wysiwyg v-model="editedItem.response" />
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -36,25 +36,30 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-                    <v-btn color="blue darken-1" flat @click.native="createSlot">Save</v-btn>
+                    <v-btn color="blue darken-1" flat @click.native="save">Save</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
     </v-toolbar>
 
-    <v-data-table :headers="headers" :items="slots" :loading="loading" :search="search">
+    <!-- Table for Slots -->
+    <v-data-table :headers="headers" :items="slots" :loading="loading" :search="search" :rows-per-page-items="itemsPerPage">
     <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
         <template slot="items" slot-scope="props">
-            <td>
-                {{ props.item.title }}
-            </td>
-            <td>
-                <span v-html="props.item.response"></span>
-            </td>
+            <tr @click="editSlot(props.item)">
+                <td>
+                    {{ props.item.title }}
+                </td>
+                <td>
+                    <span v-html="props.item.response"></span>
+                </td>
+            </tr>
         </template>
+        <!-- No Search Results Error -->
         <v-alert slot="no-results" :value="true" color="error" icon="warning">
           Your search for "{{ search }}" found no results.
         </v-alert>
+        <!-- Pagination -->
         <template slot="pageText" slot-scope="{ pageStart, pageStop }">
             From {{ pageStart }} to {{ pageStop }}
         </template>
@@ -69,7 +74,7 @@ export default {
         return {
             intent: this.intentName,
             search: '',
-            max25chars: (v) => v.length <= 25 || 'Input too long!',
+            itemsPerPage: [50, 75],
             dialog: false,
             loading: false,
             slots: [],
@@ -93,18 +98,12 @@ export default {
             ],
             editedIndex: -1,
             editedItem: {
-                name: '',
-                calories: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0
+                title: '',
+                response: ''
             },
             defaultItem: {
-                name: '',
-                calories: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0
+                title: '',
+                response: ''
             }
         }
     },
@@ -112,6 +111,11 @@ export default {
         '$route.params.intentName': function (id) {
             this.intent = id;
             this.fetchSlots();
+        }
+    },
+    computed: {
+        formTitle () {
+        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
         }
     },
     created() {
@@ -141,29 +145,39 @@ export default {
             }
         },
         save() {
+            if (this.editedIndex > -1) {
+                
+                Object.assign(this.slots[this.editedIndex], this.editedItem)
+            } else {
 
+                this.createSlot();
+                this.slots.push(this.editedItem)
+                }
+            this.close()
+        },
+        editSlot(item) {
+            this.editedIndex = this.slots.indexOf(item)
+            this.editedItem = Object.assign({}, item)
+            this.dialog = true
         },
         createSlot() {
-            // if (this.editedIndex > -1) {
-            //     Object.assign(this.desserts[this.editedIndex], this.editedItem)
-            // } else {
-            //     this.desserts.push(this.editedItem)
-            // }
-            // this.close()
             fetch('api/intents/' + this.intent + '/slots', {
                     method: 'post',
-                    body: JSON.stringify(this.slot),
+                    body: JSON.stringify(this.editedItem),
                     headers: {
                         'content-type': 'application/json'
                     }
                 }).then(res => res.json())
                 .then(data => {
-                    this.slot.title = '';
-                    this.slot.response = '';
+                    // this.editedItem.title = '';
+                    // this.editedItem.response = '';
                     alert('Slot Added');
                     this.fetchSlots();
                 })
                 .catch(err => console.log(err))
+        },
+        updateSlot() {
+
         },
         cancel() {
 
