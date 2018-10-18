@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <script>window.Laravel = { csrfToken: '{{ csrf_token() }}' } </script>
 
-        <title>Laravel</title>
+        <title>Salli Console</title>
 
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
@@ -19,7 +19,6 @@
         <div id="app">
                 <v-app>
                     <navigation></navigation>
-                        
                         <v-content>
                           <v-container fluid>
                             <router-view></router-view>

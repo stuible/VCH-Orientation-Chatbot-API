@@ -24,7 +24,7 @@
 
     <v-toolbar app absolute clipped-left>
         <v-toolbar-side-icon @click.native="drawer = !drawer"></v-toolbar-side-icon>
-        <v-toolbar-title>VCH Orientation Chatbot</v-toolbar-title>
+        <v-toolbar-title>Salli Console</v-toolbar-title>
     </v-toolbar>
 </div>
 </template>
