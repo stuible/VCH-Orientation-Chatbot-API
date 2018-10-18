@@ -14510,8 +14510,8 @@ var render = function() {
                 "v-btn",
                 { attrs: { icon: "", ripple: "" } },
                 [
-                  _c("v-icon", { attrs: { color: "grey lighten-1" } }, [
-                    _vm._v("info")
+                  _c("v-icon", { attrs: { color: "grey small lighten-1" } }, [
+                    _vm._v("edit")
                   ])
                 ],
                 1
@@ -14735,7 +14735,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         save: function save() {
             if (this.editedIndex > -1) {
-
+                this.updateSlot();
                 Object.assign(this.slots[this.editedIndex], this.slot);
             } else {
 
