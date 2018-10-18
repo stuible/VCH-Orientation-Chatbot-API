@@ -26,13 +26,28 @@ class SlotController extends Controller
         return SlotResource::collection($slots);
     }
 
+    public function show($intentName, $slotName)
+    {
+        // Get all Intents
+        // $slots = new Slot;
+        // echo "<p class='lmao'> $slots </p>";
+
+        $intent = Intent::where('name', $intentName)->first();
+
+        $slots = Slot::paginate(5000);
+
+        $slots = $slots->where('intentID', $intent['id'])->where('title', $slotName);
+
+        return SlotResource::collection($slots);
+    }
+
     public function store(Request $request, $intent)
     {
         // $slot = $request->isMethod('put') ? Slot::where('name', $intentName)->first() : new Slot;
 
         $intent = Intent::where('name', $intent)->first();
 
-        $slot = new Slot;
+        $slot = $request->isMethod('put') ? Slot::findOrFail($request->input('id')) : new Slot;
 
         $slot->id = $request->input('id');
         $slot->title = $request->input('title');
