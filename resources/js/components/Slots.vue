@@ -64,6 +64,27 @@
             From {{ pageStart }} to {{ pageStop }}
         </template>
     </v-data-table>
+
+    <!-- Snackbar Popup -->
+    <v-snackbar
+        v-model="snackbar.enabled"
+        :bottom="snackbar.y === 'bottom'"
+        :left="snackbar.x === 'left'"
+        :multi-line="snackbar.mode === 'multi-line'"
+        :right="snackbar.x === 'right'"
+        :timeout="snackbar.timeout"
+        :top="snackbar.y === 'top'"
+        :vertical="snackbar.mode === 'vertical'"
+      >
+        {{ snackbar.text }}
+        <v-btn
+          color="pink"
+          flat
+          @click="snackbar.enabled = false"
+        >
+          Close
+        </v-btn>
+    </v-snackbar>
 </div>
 </template>
 
@@ -100,7 +121,16 @@ export default {
             defaultItem: {
                 title: '',
                 response: ''
-            }
+            },
+            snackbar: {
+                enabled: false,
+                y: 'bottom',
+                x: 'right',
+                mode: '',
+                timeout: 5000,
+                text: 'Hello, I\'m a snackbar'
+            },
+
         }
     },
     watch: {
@@ -128,18 +158,18 @@ export default {
                     this.loading = false;
                 })
         },
-        deleteIntent(name) {
-            if (confirm('Are you sure you want to delete?')) {
-                fetch(`api/intents/${name}`, {
-                        method: 'delete'
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        alert('Article Removed');
-                    })
-                    .catch(err => console.log(err));
-            }
-        },
+        // deleteIntent(name) {
+        //     if (confirm('Are you sure you want to delete?')) {
+        //         fetch(`api/intents/${name}`, {
+        //                 method: 'delete'
+        //             })
+        //             .then(res => res.json())
+        //             .then(data => {
+        //                 alert('Article Removed');
+        //             })
+        //             .catch(err => console.log(err));
+        //     }
+        // },
         save() {
             if (this.editedIndex > -1) {
                 this.updateSlot()
@@ -167,7 +197,7 @@ export default {
                 .then(data => {
                     // this.slot.title = '';
                     // this.slot.response = '';
-                    alert('Slot Added');
+                    this.showSnackbar('Slot Added');
                     this.fetchSlots();
                 })
                 .catch(err => console.log(err))
@@ -183,7 +213,8 @@ export default {
                 .then(data => {
                     // this.slot.title = '';
                     // this.slot.response = '';
-                    alert('Slot Updated');
+                    // alert('Slot Updated');
+                    this.showSnackbar('Slot Updated');
                     this.fetchSlots();
                 })
                 .catch(err => console.log(err))
@@ -201,6 +232,10 @@ export default {
                 this.editedIndex = -1
             }, 300)
         },
+        showSnackbar(message){
+            this.snackbar.text = message;
+            this.snackbar.enabled = true;
+        }
     }
 }
 </script>

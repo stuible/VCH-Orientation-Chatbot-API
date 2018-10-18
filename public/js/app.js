@@ -14657,6 +14657,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['intentName'],
@@ -14688,7 +14709,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             defaultItem: {
                 title: '',
                 response: ''
+            },
+            snackbar: {
+                enabled: false,
+                y: 'bottom',
+                x: 'right',
+                mode: '',
+                timeout: 5000,
+                text: 'Hello, I\'m a snackbar'
             }
+
         };
     },
 
@@ -14720,19 +14750,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.loading = false;
             });
         },
-        deleteIntent: function deleteIntent(name) {
-            if (confirm('Are you sure you want to delete?')) {
-                fetch('api/intents/' + name, {
-                    method: 'delete'
-                }).then(function (res) {
-                    return res.json();
-                }).then(function (data) {
-                    alert('Article Removed');
-                }).catch(function (err) {
-                    return console.log(err);
-                });
-            }
-        },
+
+        // deleteIntent(name) {
+        //     if (confirm('Are you sure you want to delete?')) {
+        //         fetch(`api/intents/${name}`, {
+        //                 method: 'delete'
+        //             })
+        //             .then(res => res.json())
+        //             .then(data => {
+        //                 alert('Article Removed');
+        //             })
+        //             .catch(err => console.log(err));
+        //     }
+        // },
         save: function save() {
             if (this.editedIndex > -1) {
                 this.updateSlot();
@@ -14763,7 +14793,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (data) {
                 // this.slot.title = '';
                 // this.slot.response = '';
-                alert('Slot Added');
+                _this2.showSnackbar('Slot Added');
                 _this2.fetchSlots();
             }).catch(function (err) {
                 return console.log(err);
@@ -14783,7 +14813,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (data) {
                 // this.slot.title = '';
                 // this.slot.response = '';
-                alert('Slot Updated');
+                // alert('Slot Updated');
+                _this3.showSnackbar('Slot Updated');
                 _this3.fetchSlots();
             }).catch(function (err) {
                 return console.log(err);
@@ -14799,6 +14830,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this4.slot = Object.assign({}, _this4.defaultItem);
                 _this4.editedIndex = -1;
             }, 300);
+        },
+        showSnackbar: function showSnackbar(message) {
+            this.snackbar.text = message;
+            this.snackbar.enabled = true;
         }
     }
 });
@@ -15056,6 +15091,44 @@ var render = function() {
                   '" found no results.\n        '
               )
             ]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-snackbar",
+        {
+          attrs: {
+            bottom: _vm.snackbar.y === "bottom",
+            left: _vm.snackbar.x === "left",
+            "multi-line": _vm.snackbar.mode === "multi-line",
+            right: _vm.snackbar.x === "right",
+            timeout: _vm.snackbar.timeout,
+            top: _vm.snackbar.y === "top",
+            vertical: _vm.snackbar.mode === "vertical"
+          },
+          model: {
+            value: _vm.snackbar.enabled,
+            callback: function($$v) {
+              _vm.$set(_vm.snackbar, "enabled", $$v)
+            },
+            expression: "snackbar.enabled"
+          }
+        },
+        [
+          _vm._v("\n        " + _vm._s(_vm.snackbar.text) + "\n        "),
+          _c(
+            "v-btn",
+            {
+              attrs: { color: "pink", flat: "" },
+              on: {
+                click: function($event) {
+                  _vm.snackbar.enabled = false
+                }
+              }
+            },
+            [_vm._v("\n          Close\n        ")]
           )
         ],
         1
