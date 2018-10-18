@@ -4,8 +4,16 @@
         <v-toolbar-title>{{ intent }} Slots</v-toolbar-title>
 
         <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          append-icon="search"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
+        <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
-            <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn>
+            <v-btn slot="activator" color="primary" dark class="mb-2">Add Response</v-btn>
             <v-card>
                 <v-card-title>
                     <span class="headline">Create New Response</span>
@@ -34,23 +42,19 @@
         </v-dialog>
     </v-toolbar>
 
-    <v-data-table :headers="headers" :items="slots" :loading="loading">
+    <v-data-table :headers="headers" :items="slots" :loading="loading" :search="search">
     <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
         <template slot="items" slot-scope="props">
             <td>
-                <v-edit-dialog :return-value.sync="props.item.title" lazy @save="save" @cancel="cancel" @open="open" @close="close">
-
-                    {{ props.item.title }}
-                    <v-text-field slot="input" v-model="props.item.title" label="Edit" single-line></v-text-field>
-                </v-edit-dialog>
+                {{ props.item.title }}
             </td>
             <td>
-                <v-edit-dialog :return-value.sync="props.item.response" lazy @save="save" @cancel="cancel" @open="open" @close="close">
-                    <span v-html="props.item.response"></span>
-                    <v-text-field slot="input" v-model="props.item.response" label="Edit" single-line></v-text-field>
-                </v-edit-dialog>
+                <span v-html="props.item.response"></span>
             </td>
         </template>
+        <v-alert slot="no-results" :value="true" color="error" icon="warning">
+          Your search for "{{ search }}" found no results.
+        </v-alert>
         <template slot="pageText" slot-scope="{ pageStart, pageStop }">
             From {{ pageStart }} to {{ pageStop }}
         </template>
@@ -64,6 +68,7 @@ export default {
     data() {
         return {
             intent: this.intentName,
+            search: '',
             max25chars: (v) => v.length <= 25 || 'Input too long!',
             dialog: false,
             loading: false,
