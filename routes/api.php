@@ -54,3 +54,23 @@ Route::put('intents/{intent}/slots', 'SlotController@store');
 
 //Destroy Intent
 Route::delete('intents/{intent}/slots/{name}', 'SlotController@destroy');
+
+
+
+
+// SYNONYMS
+
+//All Synonyms
+Route::get('intents/{intent}/slots/{slot}/synonyms', 'SynonymController@index');
+
+//Single Synonym
+Route::get('intents/{intent}/slots/{slot}/synonyms/{synonym}', 'SynonymController@show');
+
+//Create Synonym
+Route::post('intents/{intent}/slots/{slot}/synonyms', 'SynonymController@store');
+
+//Update Synonym
+Route::put('intents/{intent}/slots/{slot}/synonyms', 'SynonymController@store');
+
+//Destroy Synonym
+Route::delete('intents/{intent}/slots/{slot}/synonyms/{synonym}', 'SynonymController@destroy');
