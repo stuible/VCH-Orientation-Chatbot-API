@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Slot;
 use App\Intent;
+use App\Synonym;
 use App\Http\Resources\Slot as SlotResource;
 use App\Http\Resources\Intent as IntentResource;
 
@@ -33,6 +34,10 @@ class SlotController extends Controller
         $slots = Slot::paginate(5000);
 
         $slots = $slots->where('intentID', $intent['id'])->where('title', $slotName);
+
+        // $synonyms = Synonym::where('slotID', $slots['id'])->first();
+        // echo $slots;
+        // return $synonyms;
 
         return SlotResource::collection($slots);
     }
