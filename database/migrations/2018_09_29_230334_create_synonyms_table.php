@@ -15,6 +15,9 @@ class CreateSynonymsTable extends Migration
     {
         Schema::create('synonyms', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('slotID')->unsigned();
+            $table->foreign('slotID')->references('id')->on('slots')->onDelete('cascade');
+            $table->string('text');
             $table->timestamps();
         });
     }
