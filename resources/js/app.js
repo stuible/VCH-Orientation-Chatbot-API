@@ -35,6 +35,7 @@ Vue.use(wysiwyg, {
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.component('synonyms', require('./components/Synonyms.vue'));
 Vue.component('intents', require('./components/Intents.vue'));
 Vue.component('breadcrumbs', require('./components/Breadcrumbs.vue'));
 Vue.component('navigation', require('./components/Navigation.vue'));
