@@ -14,8 +14,6 @@ class SlotController extends Controller
     public function index($intentName)
     {
         // Get all Intents
-        // $slots = new Slot;
-        // echo "<p class='lmao'> $slots </p>";
 
         $intent = Intent::where('name', $intentName)->first();
 
@@ -28,9 +26,7 @@ class SlotController extends Controller
 
     public function show($intentName, $slotName)
     {
-        // Get all Intents
-        // $slots = new Slot;
-        // echo "<p class='lmao'> $slots </p>";
+        // Get single Intent
 
         $intent = Intent::where('name', $intentName)->first();
 
