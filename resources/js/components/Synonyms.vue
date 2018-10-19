@@ -1,15 +1,6 @@
 <template>
-<v-combobox
-      v-model="model"
-      :items="items"
-      hide-selected
-      hide-details
-      label="Synonyms"
-      multiple
-      small-chips
-
-    >
-      <!-- <template slot="no-data">
+<v-combobox v-model="model" :items="items" hide-selected hide-details label="Synonyms" multiple small-chips :disabled="loading">
+    <!-- <template slot="no-data">
         <v-list-tile>
           <span class="subheading">Create</span>
           <v-chip
@@ -20,28 +11,15 @@
           </v-chip>
         </v-list-tile>
       </template> -->
-      <template
-        v-if="item === Object(item)"
-        slot="selection"
-        slot-scope="{ item, parent, selected }"
-        label
-
-      >
-        <v-chip
-          :color="`${item.color} lighten-3`"
-          :selected="selected"
-          small
-        >
-          <span class="pr-2">
+    <template v-if="item === Object(item)" slot="selection" slot-scope="{ item, parent, selected }" label>
+        <v-chip :color="`${item.color} lighten-3`" :selected="selected" small>
+            <span class="pr-2">
             {{ item.text }}
           </span>
-          <v-icon
-            small
-            @click="parent.selectItem(item)"
-          >close</v-icon>
+            <v-icon small @click="parent.selectItem(item)">close</v-icon>
         </v-chip>
-      </template>
-      <!-- <template
+    </template>
+    <!-- <template
         slot="item"
         slot-scope="{ index, item, parent }"
       >
@@ -81,7 +59,7 @@
 
 <script>
 export default {
-    props: ['synonyms'],
+    props: ['intentName', 'slotName'],
     data() {
         return {
             loading: false,
@@ -90,12 +68,10 @@ export default {
             colors: ['cyan', 'teal'],
             editing: null,
             index: -1,
-            items: [
-                ],
-                nonce: 1,
-                menu: false,
-                model: [
-                ],
+            items: [],
+            nonce: 1,
+            menu: false,
+            model: [],
             x: 0,
             search: null,
             y: 0
@@ -111,57 +87,65 @@ export default {
     },
 
     watch: {
-    model (val, prev) {
-      if (val.length === prev.length) return
+        model(val, prev) {
+            if (val.length === prev.length) return
 
-      this.model = val.map(v => {
-        if (typeof v === 'string') {
-          v = {
-            text: v,
-            color: this.colors[this.nonce - 1]
-          }
+            this.model = val.map(v => {
+                if (typeof v === 'string') {
+                    v = {
+                        text: v,
+                        color: this.colors[this.nonce - 1]
+                    }
 
-          this.items.push(v)
+                    this.items.push(v)
 
-          this.nonce++
+                    this.nonce++
+                }
+
+                return v
+            })
+        },
+        '$route.params.intentName': function (id) {
+            console.log('intent name changed');
+            // this.fetchSynonyms();
+        },
+        slotName: function(newVal, oldVal) { // watch it
+          this.fetchSynonyms();
         }
-
-        return v
-      })
-    }
-  },
-
-  methods: {
-    edit (index, item) {
-      if (!this.editing) {
-        this.editing = item
-        this.index = index
-      } else {
-        this.editing = null
-        this.index = -1
-      }
+        
     },
-    filter (item, queryText, itemText) {
-      if (item.header) return false
 
-      const hasValue = val => val != null ? val : ''
+    methods: {
+        edit(index, item) {
+            if (!this.editing) {
+                this.editing = item
+                this.index = index
+            } else {
+                this.editing = null
+                this.index = -1
+            }
+        },
+        filter(item, queryText, itemText) {
+            if (item.header) return false
 
-      const text = hasValue(itemText)
-      const query = hasValue(queryText)
+            const hasValue = val => val != null ? val : ''
 
-      return text.toString()
-        .toLowerCase()
-        .indexOf(query.toString().toLowerCase()) > -1
-    },
-    fetchSynonyms() {
+            const text = hasValue(itemText)
+            const query = hasValue(queryText)
+
+            return text.toString()
+                .toLowerCase()
+                .indexOf(query.toString().toLowerCase()) > -1
+        },
+        fetchSynonyms() {
             this.loading = true;
-            fetch('api/intents/' + this.intent + '/slots/' + this.slot + '/synonyms')
+            fetch('api/intents/' + this.intentName + '/slots/' + this.slotName + '/synonyms')
                 .then(res => res.json())
                 .then(res => {
-                    this.items = res.data;
+                    this.model = res.data;
                     this.loading = false;
                 })
         },
-  }
+    }
 }
 </script>
