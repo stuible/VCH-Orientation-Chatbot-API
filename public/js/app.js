@@ -13847,7 +13847,7 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(6);
-module.exports = __webpack_require__(25);
+module.exports = __webpack_require__(28);
 
 
 /***/ }),
@@ -13900,6 +13900,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_4_vue_
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('synonyms', __webpack_require__(25));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('intents', __webpack_require__(4));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('breadcrumbs', __webpack_require__(20));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('navigation', __webpack_require__(22));
@@ -14510,7 +14511,7 @@ var render = function() {
                 "v-btn",
                 { attrs: { icon: "", ripple: "" } },
                 [
-                  _c("v-icon", { attrs: { color: "grey small lighten-1" } }, [
+                  _c("v-icon", { attrs: { color: "grey lighten-1" } }, [
                     _vm._v("edit")
                   ])
                 ],
@@ -14588,6 +14589,9 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
 //
 //
 //
@@ -14940,8 +14944,16 @@ var render = function() {
                               _c(
                                 "v-flex",
                                 { attrs: { xs12: "", sm12: "", md12: "" } },
+                                [_c("synonyms")],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs12: "", sm12: "", md12: "" } },
                                 [
                                   _c("wysiwyg", {
+                                    staticClass: "mt-5",
                                     model: {
                                       value: _vm.slot.response,
                                       callback: function($$v) {
@@ -36818,6 +36830,311 @@ if (false) {
 
 /***/ }),
 /* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(26)
+/* template */
+var __vue_template__ = __webpack_require__(27)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/Synonyms.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-d740a57a", Component.options)
+  } else {
+    hotAPI.reload("data-v-d740a57a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['synonyms'],
+  data: function data() {
+    return {
+      loading: false,
+      activator: null,
+      attach: null,
+      colors: ['cyan', 'teal'],
+      editing: null,
+      index: -1,
+      items: [],
+      nonce: 1,
+      menu: false,
+      model: [],
+      x: 0,
+      search: null,
+      y: 0
+    };
+  },
+
+  computed: {
+    // formTitle () {
+    // return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+    // }
+  },
+  created: function created() {
+    this.fetchSynonyms();
+  },
+
+
+  watch: {
+    model: function model(val, prev) {
+      var _this = this;
+
+      if (val.length === prev.length) return;
+
+      this.model = val.map(function (v) {
+        if (typeof v === 'string') {
+          v = {
+            text: v,
+            color: _this.colors[_this.nonce - 1]
+          };
+
+          _this.items.push(v);
+
+          _this.nonce++;
+        }
+
+        return v;
+      });
+    }
+  },
+
+  methods: {
+    edit: function edit(index, item) {
+      if (!this.editing) {
+        this.editing = item;
+        this.index = index;
+      } else {
+        this.editing = null;
+        this.index = -1;
+      }
+    },
+    filter: function filter(item, queryText, itemText) {
+      if (item.header) return false;
+
+      var hasValue = function hasValue(val) {
+        return val != null ? val : '';
+      };
+
+      var text = hasValue(itemText);
+      var query = hasValue(queryText);
+
+      return text.toString().toLowerCase().indexOf(query.toString().toLowerCase()) > -1;
+    },
+    fetchSynonyms: function fetchSynonyms() {
+      var _this2 = this;
+
+      this.loading = true;
+      fetch('api/intents/' + this.intent + '/slots/' + this.slot + '/synonyms').then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        _this2.items = res.data;
+        _this2.loading = false;
+      });
+    }
+  }
+});
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("v-combobox", {
+    attrs: {
+      items: _vm.items,
+      "hide-selected": "",
+      "hide-details": "",
+      label: "Synonyms",
+      multiple: "",
+      "small-chips": ""
+    },
+    scopedSlots: _vm._u([
+      {
+        key: "selection",
+        fn: function(ref) {
+          var item = ref.item
+          var parent = ref.parent
+          var selected = ref.selected
+          return item === Object(item)
+            ? [
+                _c(
+                  "v-chip",
+                  {
+                    attrs: {
+                      color: item.color + " lighten-3",
+                      selected: selected,
+                      small: ""
+                    }
+                  },
+                  [
+                    _c("span", { staticClass: "pr-2" }, [
+                      _vm._v(
+                        "\n            " + _vm._s(item.text) + "\n          "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "v-icon",
+                      {
+                        attrs: { small: "" },
+                        on: {
+                          click: function($event) {
+                            parent.selectItem(item)
+                          }
+                        }
+                      },
+                      [_vm._v("close")]
+                    )
+                  ],
+                  1
+                )
+              ]
+            : undefined
+        }
+      }
+    ]),
+    model: {
+      value: _vm.model,
+      callback: function($$v) {
+        _vm.model = $$v
+      },
+      expression: "model"
+    }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-d740a57a", module.exports)
+  }
+}
+
+/***/ }),
+/* 28 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
