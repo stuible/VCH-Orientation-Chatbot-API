@@ -27,7 +27,7 @@
                                 <v-text-field v-model="slot.title" label="Term"></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm12 md12>
-                                <synonyms></synonyms>
+                                <synonyms :intentName="intent" :slotName="slot.title"></synonyms>
                             </v-flex>
                             <v-flex xs12 sm12 md12>
                                 <wysiwyg class="mt-5" v-model="slot.response" />
