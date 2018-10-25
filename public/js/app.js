@@ -14682,6 +14682,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['intentName'],
@@ -14708,6 +14723,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 align: 'left',
                 sortable: false,
                 value: 'response'
+            }, {
+                text: 'Actions',
+                align: 'center',
+                sortable: false,
+                value: 'action'
             }],
             editedIndex: -1,
             defaultItem: {
@@ -14824,15 +14844,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return console.log(err);
             });
         },
+        deleteSlot: function deleteSlot(item, parent) {
+            var _this4 = this;
+
+            fetch('api/intents/' + this.intentName + '/slots/' + item.title, {
+                method: 'delete',
+                headers: {
+                    'content-type': 'application/json'
+                }
+            }).then(function (res) {
+                return res.json();
+            }).then(function (data) {
+                // this.slot.title = '';
+                // this.slot.response = '';
+                parent.selectItem(item);
+                _this4.showSnackbar('Slot Removed');
+                _this4.fetchSlots();
+            }).catch(function (err) {
+                return console.log(err);
+            });
+        },
         cancel: function cancel() {},
         open: function open() {},
         close: function close() {
-            var _this4 = this;
+            var _this5 = this;
 
             this.dialog = false;
             setTimeout(function () {
-                _this4.slot = Object.assign({}, _this4.defaultItem);
-                _this4.editedIndex = -1;
+                _this5.slot = Object.assign({}, _this5.defaultItem);
+                _this5.editedIndex = -1;
             }, 300);
         },
         showSnackbar: function showSnackbar(message) {
@@ -15040,31 +15080,63 @@ var render = function() {
               key: "items",
               fn: function(props) {
                 return [
-                  _c(
-                    "tr",
-                    {
-                      on: {
-                        click: function($event) {
-                          _vm.editSlot(props.item)
-                        }
-                      }
-                    },
-                    [
-                      _c("td", [
-                        _vm._v(
-                          "\n                    " +
-                            _vm._s(props.item.title) +
-                            "\n                "
+                  _c("tr", [
+                    _c("td", [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(props.item.title) +
+                          "\n                "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c("span", {
+                        domProps: { innerHTML: _vm._s(props.item.response) }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      { staticClass: "center" },
+                      [
+                        _c(
+                          "v-icon",
+                          {
+                            staticClass: "mr-2",
+                            attrs: { small: "" },
+                            on: {
+                              click: function($event) {
+                                _vm.editSlot(props.item)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                    edit\n                    "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-icon",
+                          {
+                            attrs: { small: "" },
+                            on: {
+                              click: function($event) {
+                                _vm.deleteSlot(props.item)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                    delete\n                    "
+                            )
+                          ]
                         )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _c("span", {
-                          domProps: { innerHTML: _vm._s(props.item.response) }
-                        })
-                      ])
-                    ]
-                  )
+                      ],
+                      1
+                    )
+                  ])
                 ]
               }
             },
