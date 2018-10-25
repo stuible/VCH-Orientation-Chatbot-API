@@ -36697,14 +36697,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             if (val.length === prev.length) return;
-
+            // console.log(val);
+            // console.log(prev);
             this.model = val.map(function (v) {
+                // console.log(v);
                 if (typeof v === 'string') {
                     v = {
-                        text: v,
-                        color: _this.colors[_this.nonce - 1]
+                        text: v
+                        // color: this.colors[this.nonce - 1]
                     };
-
+                    _this.createSynonyms(v);
                     _this.items.push(v);
 
                     _this.nonce++;
@@ -36726,6 +36728,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
+        synonymRemoved: function synonymRemoved(item, parent) {
+            parent.selectItem(item);
+            console.log(item);
+        },
         edit: function edit(index, item) {
             if (!this.editing) {
                 this.editing = item;
@@ -36756,6 +36762,47 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (res) {
                 _this2.model = res.data;
                 _this2.loading = false;
+            });
+            console.log(this.model);
+        },
+        createSynonyms: function createSynonyms(newSynonym) {
+            var _this3 = this;
+
+            fetch('api/intents/' + this.intentName + '/slots/' + this.slotName + '/synonyms', {
+                method: 'post',
+                body: JSON.stringify(newSynonym),
+                headers: {
+                    'content-type': 'application/json'
+                }
+            }).then(function (res) {
+                return res.json();
+            }).then(function (data) {
+                // this.slot.title = '';
+                // this.slot.response = '';
+                _this3.showSnackbar('Synonym Added');
+                _this3.fetchSlots();
+            }).catch(function (err) {
+                return console.log(err);
+            });
+        },
+        deleteSynonym: function deleteSynonym(item, parent) {
+            var _this4 = this;
+
+            fetch('api/intents/' + this.intentName + '/slots/' + this.slotName + '/synonyms/' + item.text, {
+                method: 'delete',
+                headers: {
+                    'content-type': 'application/json'
+                }
+            }).then(function (res) {
+                return res.json();
+            }).then(function (data) {
+                // this.slot.title = '';
+                // this.slot.response = '';
+                parent.selectItem(item);
+                // this.showSnackbar('Synonym Removed');
+                _this4.fetchSlots();
+            }).catch(function (err) {
+                return console.log(err);
             });
         }
     }
@@ -36800,7 +36847,7 @@ var render = function() {
                   [
                     _c("span", { staticClass: "pr-2" }, [
                       _vm._v(
-                        "\n            " + _vm._s(item.text) + "\n          "
+                        "\n            " + _vm._s(item.text) + "\n            "
                       )
                     ]),
                     _vm._v(" "),
@@ -36810,7 +36857,7 @@ var render = function() {
                         attrs: { small: "" },
                         on: {
                           click: function($event) {
-                            parent.selectItem(item)
+                            _vm.deleteSynonym(item, parent)
                           }
                         }
                       },
