@@ -27,7 +27,7 @@
                                 <v-text-field v-model="slot.title" label="Term"></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm12 md12>
-                                <synonyms :intentName="intent" :slotName="slot.title"></synonyms>
+                                <synonyms :intentName="intent" :slotName="slot.title" ref="synonymsComponent"></synonyms>
                             </v-flex>
                             <v-flex xs12 sm12 md12>
                                 <wysiwyg class="mt-5" v-model="slot.response" />
@@ -258,6 +258,7 @@ export default {
             this.dialog = false
             setTimeout(() => {
                 this.slot = Object.assign({}, this.defaultItem)
+                this.$refs.synonymsComponent.clearSynonyms();
                 this.editedIndex = -1
             }, 300)
         },

@@ -189,6 +189,10 @@ export default {
                 })
                 .catch(err => console.log(err))
         },
+        clearSynonyms(){
+            console.log('clearing synonyms')
+            this.model = [];
+        }
     }
 }
 </script>

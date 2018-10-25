@@ -14860,6 +14860,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.dialog = false;
             setTimeout(function () {
                 _this5.slot = Object.assign({}, _this5.defaultItem);
+                _this5.$refs.synonymsComponent.clearSynonyms();
                 _this5.editedIndex = -1;
             }, 300);
         },
@@ -14974,6 +14975,7 @@ var render = function() {
                                 { attrs: { xs12: "", sm12: "", md12: "" } },
                                 [
                                   _c("synonyms", {
+                                    ref: "synonymsComponent",
                                     attrs: {
                                       intentName: _vm.intent,
                                       slotName: _vm.slot.title
@@ -36864,6 +36866,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).catch(function (err) {
                 return console.log(err);
             });
+        },
+        clearSynonyms: function clearSynonyms() {
+            console.log('clearing synonyms');
+            this.model = [];
         }
     }
 });
