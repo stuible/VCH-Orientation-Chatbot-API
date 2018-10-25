@@ -15,8 +15,8 @@
         <v-chip :color="`${item.color} lighten-3`" :selected="selected" small>
             <span class="pr-2">
             {{ item.text }}
-          </span>
-            <v-icon small @click="parent.selectItem(item)">close</v-icon>
+            </span>
+            <v-icon small @click="deleteSynonym(item, parent)">close</v-icon>
         </v-chip>
     </template>
     <!-- <template
@@ -89,21 +89,26 @@ export default {
     watch: {
         model(val, prev) {
             if (val.length === prev.length) return
-
+            // console.log(val);
+            // console.log(prev);
             this.model = val.map(v => {
+                // console.log(v);
                 if (typeof v === 'string') {
                     v = {
                         text: v,
-                        color: this.colors[this.nonce - 1]
+                        // color: this.colors[this.nonce - 1]
                     }
-
+                    this.createSynonyms(v)
                     this.items.push(v)
+
+                    
 
                     this.nonce++
                 }
 
                 return v
             })
+            
         },
         '$route.params.intentName': function (id) {
             console.log('intent name changed');
@@ -116,6 +121,11 @@ export default {
     },
 
     methods: {
+        synonymRemoved:function(item, parent){
+            parent.selectItem(item);
+            console.log(item);
+
+         },
         edit(index, item) {
             if (!this.editing) {
                 this.editing = item
@@ -145,6 +155,39 @@ export default {
                     this.model = res.data;
                     this.loading = false;
                 })
+                console.log(this.model);
+        },
+        createSynonyms(newSynonym) {
+            fetch('api/intents/' + this.intentName + '/slots/' + this.slotName + '/synonyms', {
+                    method: 'post',
+                    body: JSON.stringify(newSynonym),
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }).then(res => res.json())
+                .then(data => {
+                    // this.slot.title = '';
+                    // this.slot.response = '';
+                    this.showSnackbar('Synonym Added');
+                    this.fetchSlots();
+                })
+                .catch(err => console.log(err))
+        },
+        deleteSynonym(item, parent) {
+            fetch('api/intents/' + this.intentName + '/slots/' + this.slotName + '/synonyms/' + item.text, {
+                    method: 'delete',
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }).then(res => res.json())
+                .then(data => {
+                    // this.slot.title = '';
+                    // this.slot.response = '';
+                    parent.selectItem(item);
+                    // this.showSnackbar('Synonym Removed');
+                    this.fetchSlots();
+                })
+                .catch(err => console.log(err))
         },
     }
 }
