@@ -49,12 +49,27 @@
     <v-data-table :headers="headers" :items="slots" :loading="loading" :search="search" :rows-per-page-items="itemsPerPage">
     <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
         <template slot="items" slot-scope="props">
-            <tr @click="editSlot(props.item)">
+            <tr >
                 <td>
                     {{ props.item.title }}
                 </td>
                 <td>
                     <span v-html="props.item.response"></span>
+                </td>
+                <td class="center">
+                    <v-icon
+                    small
+                    class="mr-2"
+                    @click="editSlot(props.item)"
+                    >
+                    edit
+                    </v-icon>
+                    <v-icon
+                    small
+                    @click="deleteSlot(props.item)"
+                    >
+                    delete
+                    </v-icon>
                 </td>
             </tr>
         </template>
@@ -118,6 +133,12 @@ export default {
                     align: 'left',
                     sortable: false,
                     value: 'response'
+                },
+                {
+                    text: 'Actions',
+                    align: 'center',
+                    sortable: false,
+                    value: 'action'
                 },
             ],
             editedIndex: -1,
@@ -218,6 +239,22 @@ export default {
                     // this.slot.response = '';
                     // alert('Slot Updated');
                     this.showSnackbar('Slot Updated');
+                    this.fetchSlots();
+                })
+                .catch(err => console.log(err))
+        },
+        deleteSlot(item, parent) {
+            fetch('api/intents/' + this.intentName + '/slots/' + item.title, {
+                    method: 'delete',
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }).then(res => res.json())
+                .then(data => {
+                    // this.slot.title = '';
+                    // this.slot.response = '';
+                    parent.selectItem(item);
+                    this.showSnackbar('Slot Removed');
                     this.fetchSlots();
                 })
                 .catch(err => console.log(err))
