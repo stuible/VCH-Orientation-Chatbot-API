@@ -18,7 +18,7 @@ class CreateSlotsTable extends Migration
             $table->integer('intentID')->unsigned();
             $table->foreign('intentID')->references('id')->on('intents')->onDelete('cascade');
             $table->string('title');
-            $table->string('response');
+            $table->string('response')->nullable();
             $table->timestamps();
         });
     }

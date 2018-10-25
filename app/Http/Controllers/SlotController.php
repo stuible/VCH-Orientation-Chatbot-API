@@ -73,7 +73,7 @@ class SlotController extends Controller
         $slot = Slot::where('title', $slotName)->where('intentID', $intent['id'])->first();
 
         if($slot->delete()){
-            return new SlotResource($slot);
+            return new SynonymResource($slot);
         }
         
     }
