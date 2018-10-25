@@ -47,9 +47,25 @@ class SynonymController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $intentName, $slotName)
     {
-        //
+        $intent = Intent::where('name', $intentName)->first();
+
+        $slot = Slot::where('title', $slotName)->where('intentID', $intent['id'])->first();
+
+        // $synonyms = Synonym::paginate(5000);
+
+        // $synonyms = $synonyms->where('slotID', $slot['id']);
+
+        $synonym = $request->isMethod('put') ? Synonym::findOrFail($request->input('id')) : new Synonym;
+
+        $synonym->id = $request->input('id');
+        $synonym->text = $request->input('text');
+        $synonym->slotID = $slot['id'];
+
+        if($synonym->save()){
+            return new SynonymResource($synonym);
+        }
     }
 
     /**
@@ -92,8 +108,17 @@ class SynonymController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($intentName, $slotName, $synonymName)
     {
-        //
+        $intent = Intent::where('name', $intentName)->first();
+
+        $slot = Slot::where('title', $slotName)->where('intentID', $intent['id'])->first();
+
+        $synonym = Synonym::where('text', $synonymName)->where('slotID', $slot['id'])->first();
+
+        if($synonym->delete()){
+            return new SynonymResource($synonym);
+        }
+        
     }
 }
