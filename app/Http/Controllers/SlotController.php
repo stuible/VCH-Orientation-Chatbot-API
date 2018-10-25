@@ -60,4 +60,22 @@ class SlotController extends Controller
         }
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($intentName, $slotName)
+    {
+        $intent = Intent::where('name', $intentName)->first();
+
+        $slot = Slot::where('title', $slotName)->where('intentID', $intent['id'])->first();
+
+        if($slot->delete()){
+            return new SlotResource($slot);
+        }
+        
+    }
+
 }
