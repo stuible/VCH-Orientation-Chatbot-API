@@ -182,18 +182,6 @@ export default {
                     this.loading = false;
                 })
         },
-        // deleteIntent(name) {
-        //     if (confirm('Are you sure you want to delete?')) {
-        //         fetch(`api/intents/${name}`, {
-        //                 method: 'delete'
-        //             })
-        //             .then(res => res.json())
-        //             .then(data => {
-        //                 alert('Article Removed');
-        //             })
-        //             .catch(err => console.log(err));
-        //     }
-        // },
         save() {
             if (this.editedIndex > -1) {
                 this.updateSlot()
@@ -243,7 +231,8 @@ export default {
                 })
                 .catch(err => console.log(err))
         },
-        deleteSlot(item, parent) {
+        deleteSlot(item) {
+            if (confirm('Are you sure you want to delete?')) {
             fetch('api/intents/' + this.intentName + '/slots/' + item.title, {
                     method: 'delete',
                     headers: {
@@ -253,11 +242,11 @@ export default {
                 .then(data => {
                     // this.slot.title = '';
                     // this.slot.response = '';
-                    parent.selectItem(item);
                     this.showSnackbar('Slot Removed');
                     this.fetchSlots();
                 })
                 .catch(err => console.log(err))
+            }
         },
         cancel() {
 

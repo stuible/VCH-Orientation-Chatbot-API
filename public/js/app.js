@@ -14774,19 +14774,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.loading = false;
             });
         },
-
-        // deleteIntent(name) {
-        //     if (confirm('Are you sure you want to delete?')) {
-        //         fetch(`api/intents/${name}`, {
-        //                 method: 'delete'
-        //             })
-        //             .then(res => res.json())
-        //             .then(data => {
-        //                 alert('Article Removed');
-        //             })
-        //             .catch(err => console.log(err));
-        //     }
-        // },
         save: function save() {
             if (this.editedIndex > -1) {
                 this.updateSlot();
@@ -14844,25 +14831,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return console.log(err);
             });
         },
-        deleteSlot: function deleteSlot(item, parent) {
+        deleteSlot: function deleteSlot(item) {
             var _this4 = this;
 
-            fetch('api/intents/' + this.intentName + '/slots/' + item.title, {
-                method: 'delete',
-                headers: {
-                    'content-type': 'application/json'
-                }
-            }).then(function (res) {
-                return res.json();
-            }).then(function (data) {
-                // this.slot.title = '';
-                // this.slot.response = '';
-                parent.selectItem(item);
-                _this4.showSnackbar('Slot Removed');
-                _this4.fetchSlots();
-            }).catch(function (err) {
-                return console.log(err);
-            });
+            if (confirm('Are you sure you want to delete?')) {
+                fetch('api/intents/' + this.intentName + '/slots/' + item.title, {
+                    method: 'delete',
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }).then(function (res) {
+                    return res.json();
+                }).then(function (data) {
+                    // this.slot.title = '';
+                    // this.slot.response = '';
+                    _this4.showSnackbar('Slot Removed');
+                    _this4.fetchSlots();
+                }).catch(function (err) {
+                    return console.log(err);
+                });
+            }
         },
         cancel: function cancel() {},
         open: function open() {},
