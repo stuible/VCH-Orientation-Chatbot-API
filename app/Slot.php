@@ -10,7 +10,7 @@ class Slot extends Model
 
     public function intent()
     {
-    return $this->belongsTo('App\Intent', 'intentID');
+        return $this->belongsTo('App\Intent', 'intentID');
     }
 
     public function synonyms()
