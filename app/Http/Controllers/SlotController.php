@@ -9,6 +9,7 @@ use App\Intent;
 use App\Synonym;
 use App\Http\Resources\Slot as SlotResource;
 use App\Http\Resources\Intent as IntentResource;
+use App\Http\Resources\Synonym as SynonymResource;
 
 class SlotController extends Controller
 {
@@ -35,11 +36,25 @@ class SlotController extends Controller
 
         $slots = $slots->where('intentID', $intent['id'])->where('title', $slotName);
 
+        if(count($slots) > 0){
+            return SlotResource::collection($slots);
+        }
+        else {
+            // $synonym = Synonym::where('text', $slotName)->first();
+
+            // $slots = Slot::with('synonyms')->get();
+            // $slots = $slots->where('id', $synonym['slotID'])->where('intentID', $intent['id']);
+            // $slots = Slot::where('intentID', $intent['id']);
+            $synonym = Synonym::with('slot')->get()->where('slot.intentID', $intent['id'])->where('text', $slotName);
+            // echo $synonym;
+            return SlotResource::collection($synonym);
+        }
+
         // $synonyms = Synonym::where('slotID', $slots['id'])->first();
         // echo $slots;
         // return $synonyms;
 
-        return SlotResource::collection($slots);
+        
     }
 
     public function store(Request $request, $intent)
