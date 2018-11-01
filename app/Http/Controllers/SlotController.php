@@ -32,9 +32,9 @@ class SlotController extends Controller
 
         $intent = Intent::where('name', $intentName)->first();
 
-        $slots = Slot::paginate(5000);
+        $slots = Slot::query()->where('intentID', $intent['id'])->whereRaw('LOWER(`title`) LIKE ?', [trim(strtolower($slotName)).'%'])->get();
 
-        $slots = $slots->where('intentID', $intent['id'])->where('title', $slotName);
+        // $slots->get();
 
         if(count($slots) > 0){
             return SlotResource::collection($slots);
