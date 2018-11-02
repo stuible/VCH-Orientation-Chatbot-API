@@ -34,25 +34,15 @@ class SlotController extends Controller
 
         $slots = Slot::query()->where('intentID', $intent['id'])->whereRaw('LOWER(`title`) LIKE ?', [trim(strtolower($slotName)).'%'])->get();
 
-        // $slots->get();
 
         if(count($slots) > 0){
             return SlotResource::collection($slots);
         }
         else {
-            // $synonym = Synonym::where('text', $slotName)->first();
-
-            // $slots = Slot::with('synonyms')->get();
-            // $slots = $slots->where('id', $synonym['slotID'])->where('intentID', $intent['id']);
-            // $slots = Slot::where('intentID', $intent['id']);
-            $synonym = Synonym::with('slot')->get()->where('slot.intentID', $intent['id'])->where('text', $slotName);
+            $synonym = Synonym::with('slot')->where('text', $slotName)->get()->where('slot.intentID', $intent['id']);
             // echo $synonym;
             return SlotResource::collection($synonym);
         }
-
-        // $synonyms = Synonym::where('slotID', $slots['id'])->first();
-        // echo $slots;
-        // return $synonyms;
 
         
     }
